@@ -4,6 +4,32 @@ import ProductInfo from '../ProductInfo';
 import deskImg from '../../images/desk.jpeg';
 import notebookImg from '../../images/notebook.jpeg';
 import mouseImg from '../../images/mouse.jpeg';
+import ProductDetail from '../ProductDetail';
+import { useState } from 'react';
+
+const infoDetail = [
+  {
+    _id: 1,
+    img: deskImg,
+    name: '책상',
+    detail: '책상 정보',
+    price: 30000,
+  },
+  {
+    _id: 2,
+    img: notebookImg,
+    name: '노트북',
+    detail: '노트북 정보',
+    price: 2000000,
+  },
+  {
+    _id: 3,
+    img: mouseImg,
+    name: '마우스',
+    detail: '마우스 정보',
+    price: 50000,
+  },
+];
 
 const ListComponent = styled.div`
   display: flex;
@@ -15,35 +41,21 @@ const ListComponent = styled.div`
 `;
 
 function ProductList() {
-  const infoDetail = [
-    {
-      _id: 1,
-      img: deskImg,
-      name: '책상',
-      detail: '책상 정보',
-      price: 30000,
-    },
-    {
-      _id: 2,
-      img: notebookImg,
-      name: '노트북',
-      detail: '노트북 정보',
-      price: 2000000,
-    },
-    {
-      _id: 3,
-      img: mouseImg,
-      name: '마우스',
-      detail: '마우스 정보',
-      price: 50000,
-    },
-  ];
+  const [detailProduct, setDetailProduct] = useState(null);
 
   return (
     <ListComponent>
       {infoDetail.map((info) => (
-        <ProductInfo key={info._id} info={info} />
+        <ProductInfo
+          key={info._id}
+          info={info}
+          onClick={() => setDetailProduct(info)}
+        />
       ))}
+      <ProductDetail
+        detailProduct={detailProduct}
+        setDetailProduct={setDetailProduct}
+      />
     </ListComponent>
   );
 }
