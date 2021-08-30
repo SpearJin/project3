@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styled from 'styled-components';
 
 function Cart() {
   const [title, setTitle] = useState('책상');
@@ -17,18 +18,23 @@ function Cart() {
     }
   };
 
+  const CartComponent = styled.div`
+    padding: 0.5em;
+    font-size: 2.5rem;
+  `;
+
   return (
-    <>
-      <span>{title}</span>
-      <button onClick={handleInrease}>
+    <CartComponent>
+      <span className='cart-name'>{title}</span>
+      <button className='cart-button cart-increase' onClick={handleInrease}>
         <i className='fas fa-plus-square'></i>
       </button>
-      <span>{quentity}</span>
-      <button onClick={handleDecrease}>
+      <span className='cart-quentity'>{quentity}</span>
+      <button className='cart-button cart-decrease' onClick={handleDecrease}>
         <i className='fas fa-minus-square'></i>
       </button>
-      <span>{price}원</span>
-    </>
+      <span className='cart-price'>{price}원</span>
+    </CartComponent>
   );
 }
 
