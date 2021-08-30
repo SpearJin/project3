@@ -1,5 +1,11 @@
+import Cart from './components/Cart';
+
 function App() {
-  return <div>시작!!!</div>;
+  return (
+    <div>
+      <Cart />
+    </div>
+  );
 }
 
 export default App;
