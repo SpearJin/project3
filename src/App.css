@@ -45,3 +45,8 @@ body {
   align-items: center;
   padding: 10px;
 }
+
+.detail-input {
+  margin: 2px 0;
+  text-align: center;
+}

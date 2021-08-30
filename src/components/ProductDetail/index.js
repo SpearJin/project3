@@ -53,8 +53,14 @@ const DetailButton = styled.button`
   }
 `;
 
-function ProductDetail({ detailProduct, setDetailProduct, setProductList }) {
+function ProductDetail({
+  detailProduct,
+  setDetailProduct,
+  productList,
+  setProductList,
+}) {
   const { img, name, detail, price } = detailProduct;
+  const [currentState, setCurrentState] = useState('none');
   const isDisplayNone = detailProduct === null;
 
   const onHandleDelete = () => {
@@ -64,21 +70,78 @@ function ProductDetail({ detailProduct, setDetailProduct, setProductList }) {
     setDetailProduct(null);
   };
 
+  const onHandleUpdate = () => {
+    setProductList((state) =>
+      state.map((item) => {
+        if (item._id === detailProduct._id) {
+          return {
+            ...item,
+            name,
+            detail,
+            price,
+          };
+        }
+        return item;
+      })
+    );
+    setDetailProduct(null);
+  };
+
+  const divDetail = (
+    <>
+      <img src={img} />
+      <div className='detail-description'>
+        <span>{name}</span>
+        <span>{detail}</span>
+        <span>{addComma(price)}원</span>
+      </div>
+      <div>
+        <DetailButton onClick={() => setCurrentState('update')}>
+          수정
+        </DetailButton>
+        <DetailButton onClick={onHandleDelete}>삭제</DetailButton>
+      </div>
+    </>
+  );
+
+  const updateDetail = (
+    <>
+      <img src={img} />
+      <div className='detail-description'>
+        <input
+          className='detail-input'
+          type='text'
+          placeholder={name}
+          onChange={(e) => e.target.value}
+        />
+        <input
+          className='detail-input'
+          type='text'
+          placeholder={detail}
+          onChange={(e) => e.target.value}
+        />
+        <input
+          className='detail-input'
+          type='text'
+          placeholder={price}
+          onChange={(e) => e.target.value}
+        />
+      </div>
+      <div>
+        <DetailButton onClick={onHandleUpdate}>완료</DetailButton>
+        <DetailButton onClick={() => setCurrentState('none')}>
+          취소
+        </DetailButton>
+      </div>
+    </>
+  );
+
   return (
     <>
       <DetailComponent isDisplayNone={isDisplayNone}>
         <button onClick={() => setDetailProduct(null)}>X</button>
         <DetailInfo>
-          <img src={img} />
-          <div className='detail-description'>
-            <span>{name}</span>
-            <span>{detail}</span>
-            <span>{addComma(price)}원</span>
-          </div>
-          <div>
-            <DetailButton>수정</DetailButton>
-            <DetailButton onClick={onHandleDelete}>삭제</DetailButton>
-          </div>
+          {currentState === 'update' ? updateDetail : divDetail}
         </DetailInfo>
       </DetailComponent>
       <DetailWrapper />
