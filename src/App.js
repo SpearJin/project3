@@ -2,13 +2,13 @@ import './App.css';
 import Cart from './components/Cart';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import ProductInfo from './components/ProductInfo';
+import ProductList from './components/ProductList';
 
 function App() {
   return (
     <>
       <Header />
-      <ProductInfo />
+      <ProductList />
       <Footer />
     </>
   );
