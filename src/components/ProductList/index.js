@@ -52,10 +52,12 @@ function ProductList() {
           onClick={() => setDetailProduct(info)}
         />
       ))}
-      <ProductDetail
-        detailProduct={detailProduct}
-        setDetailProduct={setDetailProduct}
-      />
+      {detailProduct !== null && (
+        <ProductDetail
+          detailProduct={detailProduct}
+          setDetailProduct={setDetailProduct}
+        />
+      )}
     </ListComponent>
   );
 }
