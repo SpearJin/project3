@@ -2,9 +2,13 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import addComma from '../util/addComma';
 
-function Product({ info }) {
+const ProductComponent = styled.div`
+  padding: 0.5em;
+  font-size: 2.5rem;
+`;
+
+function Product({ name, unityPrice, setTotalPrice }) {
   const [quentity, setQuentity] = useState(5);
-  const { name, unityPrice } = info;
   const price = quentity * unityPrice;
 
   const handleInrease = () => {
@@ -19,10 +23,7 @@ function Product({ info }) {
     }
   };
 
-  const ProductComponent = styled.div`
-    padding: 0.5em;
-    font-size: 2.5rem;
-  `;
+  setTotalPrice(price);
 
   return (
     <ProductComponent>
