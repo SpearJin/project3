@@ -1,40 +1,30 @@
-import { useState } from 'react';
-import styled from 'styled-components';
+import Product from './Product';
+
+const info = [
+  {
+    id: 1,
+    name: '책상',
+    unityPrice: 30000,
+  },
+  {
+    id: 2,
+    name: '노트북',
+    unityPrice: 3000000,
+  },
+  {
+    id: 3,
+    name: '마우스',
+    unityPrice: 50000,
+  },
+];
 
 function Cart() {
-  const [title, setTitle] = useState('책상');
-  const [quentity, setQuentity] = useState(5);
-  const price = quentity * 30000;
-
-  const handleInrease = () => {
-    if (quentity < 9) {
-      setQuentity(quentity + 1);
-    }
-  };
-
-  const handleDecrease = () => {
-    if (quentity > 0) {
-      setQuentity(quentity - 1);
-    }
-  };
-
-  const CartComponent = styled.div`
-    padding: 0.5em;
-    font-size: 2.5rem;
-  `;
-
   return (
-    <CartComponent>
-      <span className='cart-name'>{title}</span>
-      <button className='cart-button cart-increase' onClick={handleInrease}>
-        <i className='fas fa-plus-square'></i>
-      </button>
-      <span className='cart-quentity'>{quentity}</span>
-      <button className='cart-button cart-decrease' onClick={handleDecrease}>
-        <i className='fas fa-minus-square'></i>
-      </button>
-      <span className='cart-price'>{price}원</span>
-    </CartComponent>
+    <>
+      {info.map((item) => (
+        <Product info={item} />
+      ))}
+    </>
   );
 }
 
