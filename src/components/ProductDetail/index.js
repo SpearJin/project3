@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import addComma from '../../util/addComma';
 
@@ -24,7 +25,11 @@ const DetailInfo = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 80%;
+  height: 100%;
+  & > img {
+    width: 200px;
+    height: 200px;
+  }
 `;
 
 const DetailWrapper = styled.div`
@@ -36,10 +41,29 @@ const DetailWrapper = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
 `;
 
-function ProductDetail({ detailProduct, setDetailProduct }) {
+const DetailButton = styled.button`
+  width: 40px;
+  height: 30px;
+  margin: 0 2px;
+  border-radius: 20px;
+  background-color: goldenrod;
+  color: white;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+function ProductDetail({ detailProduct, setDetailProduct, setProductList }) {
   const { img, name, detail, price } = detailProduct;
-  console.log(img);
   const isDisplayNone = detailProduct === null;
+
+  const onHandleDelete = () => {
+    setProductList((state) =>
+      state.filter((item) => item._id !== detailProduct._id)
+    );
+    setDetailProduct(null);
+  };
+
   return (
     <>
       <DetailComponent isDisplayNone={isDisplayNone}>
@@ -50,6 +74,10 @@ function ProductDetail({ detailProduct, setDetailProduct }) {
             <span>{name}</span>
             <span>{detail}</span>
             <span>{addComma(price)}원</span>
+          </div>
+          <div>
+            <DetailButton>수정</DetailButton>
+            <DetailButton onClick={onHandleDelete}>삭제</DetailButton>
           </div>
         </DetailInfo>
       </DetailComponent>
