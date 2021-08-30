@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import addComma from '../util/addComma';
 
 function Product({ info }) {
   const [quentity, setQuentity] = useState(5);
@@ -33,7 +34,7 @@ function Product({ info }) {
       <button className='cart-button cart-decrease' onClick={handleDecrease}>
         <i className='fas fa-minus-square'></i>
       </button>
-      <span className='cart-price'>{price}원</span>
+      <span className='cart-price'>{addComma(price)}원</span>
     </ProductComponent>
   );
 }
