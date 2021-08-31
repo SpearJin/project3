@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
-const { connect: dbConnect } = require('./models');
+const cors = require('cors');
+
+const { connect: dbConenct } = require('./models');
 const ProductModel = require('./models/product');
 
-dbConnect();
+app.use(cors());
+dbConenct();
 
 app.use(express.json());
 app.use(
@@ -19,8 +22,8 @@ app.get('/product', async function (req, res) {
 
 app.get('/product/:id', async function (req, res) {
   const id = req.params.id;
-  const products = await ProductModel.findOne({ _id: id }).exec();
-  res.send(products);
+  const product = await ProductModel.findOne({ _id: id }).exec();
+  res.send(product);
 });
 
 app.post('/product', async function (req, res) {
@@ -45,7 +48,7 @@ app.put('/product', async function (req, res) {
       price,
     }
   );
-  res.send('Update Product');
+  res.send('Put Product');
 });
 
 app.delete('/product/:id', async function (req, res) {
@@ -54,4 +57,6 @@ app.delete('/product/:id', async function (req, res) {
   res.send('Delete Product');
 });
 
-app.listen(3000);
+app.listen(4000, () => {
+  console.log('Server Start');
+});
