@@ -2,11 +2,11 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-const { connect: dbConenct } = require('./models');
+const { connect: dbConnect } = require('./models');
 const ProductModel = require('./models/product');
 
 app.use(cors());
-dbConenct();
+dbConnect();
 
 app.use(express.json());
 app.use(

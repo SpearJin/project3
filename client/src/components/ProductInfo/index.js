@@ -13,13 +13,13 @@ const InfoComponent = styled.div`
 `;
 
 function ProductInfo({ info, onClick }) {
-  const { img, name, price } = info;
+  const { imgLink, title, price } = info;
 
   return (
     <InfoComponent onClick={onClick}>
-      <img src={img} alt='product-img' />
+      <img src={imgLink} />
       <div className='info-description'>
-        <span>{name}</span>
+        <span>{title}</span>
         <span>{addComma(price)}원</span>
       </div>
     </InfoComponent>

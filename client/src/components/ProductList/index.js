@@ -1,35 +1,9 @@
 import styled from 'styled-components';
 
 import ProductInfo from '../ProductInfo';
-import deskImg from '../../images/desk.jpeg';
-import notebookImg from '../../images/notebook.jpeg';
-import mouseImg from '../../images/mouse.jpeg';
 import ProductDetail from '../ProductDetail';
-import { useState } from 'react';
-
-const infoDetail = [
-  {
-    _id: 1,
-    img: deskImg,
-    name: '책상',
-    detail: '책상 정보',
-    price: 30000,
-  },
-  {
-    _id: 2,
-    img: notebookImg,
-    name: '노트북',
-    detail: '노트북 정보',
-    price: 2000000,
-  },
-  {
-    _id: 3,
-    img: mouseImg,
-    name: '마우스',
-    detail: '마우스 정보',
-    price: 50000,
-  },
-];
+import { useEffect, useState } from 'react';
+import useApiCall from '../../hooks/useApiCall';
 
 const ListComponent = styled.div`
   display: flex;
@@ -43,7 +17,26 @@ const ListComponent = styled.div`
 
 function ProductList() {
   const [detailProduct, setDetailProduct] = useState(null);
-  const [productList, setProductList] = useState(infoDetail);
+  const [productList, setProductList] = useState(null);
+  const [payload, loading, error, fetchData] = useApiCall(
+    'http://localhost:4000/product'
+  );
+
+  useEffect(() => {
+    setProductList(payload);
+  }, [payload]);
+
+  if (loading) {
+    return <>로딩 중...</>;
+  }
+
+  if (error) {
+    return <>{error.message}</>;
+  }
+
+  if (!productList) {
+    return <></>;
+  }
 
   return (
     <ListComponent>
@@ -60,6 +53,7 @@ function ProductList() {
           setDetailProduct={setDetailProduct}
           productList={productList}
           setProductList={setProductList}
+          fetchData={fetchData}
         />
       )}
     </ListComponent>

@@ -17,9 +17,10 @@ function useApiCall(url) {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
   return [payload, loading, error, fetchData];
 }
