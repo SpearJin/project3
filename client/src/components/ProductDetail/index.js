@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState } from 'react';
 import styled from 'styled-components';
 import addComma from '../../util/addComma';
@@ -53,50 +54,46 @@ const DetailButton = styled.button`
   }
 `;
 
-function ProductDetail({ detailProduct, setDetailProduct, setProductList }) {
-  const [img, setImg] = useState(detailProduct.img);
-  const [name, setName] = useState(detailProduct.name);
+function ProductDetail({
+  detailProduct,
+  setDetailProduct,
+  setProductList,
+  fetchData,
+}) {
+  const [img, setImg] = useState(detailProduct.imgLink);
+  const [name, setName] = useState(detailProduct.title);
   const [detail, setDetail] = useState(detailProduct.detail);
   const [price, setPrice] = useState(detailProduct.price);
 
   const [currentState, setCurrentState] = useState('none');
   const isDisplayNone = detailProduct === null;
 
-  const onHandleDelete = () => {
-    setProductList((state) =>
-      state.filter((item) => item._id !== detailProduct._id)
-    );
+  const onHandleDelete = async () => {
+    await axios.delete(`http://localhost:4000/product/${detailProduct._id}`);
+    fetchData();
     setDetailProduct(null);
   };
 
-  const onHandleUpdate = () => {
-    setProductList((state) =>
-      state.map((item) => {
-        if (item._id === detailProduct._id) {
-          return {
-            ...item,
-            name,
-            detail,
-            price,
-          };
-        }
-        return item;
-      })
-    );
+  const onHandleUpdate = async () => {
+    await axios.put('http://localhost:4000/product', {
+      id: detailProduct._id,
+      title: name,
+      imgLink: img,
+      detail,
+      price,
+    });
+    fetchData();
     setDetailProduct(null);
   };
 
-  const onHandleCreate = () => {
-    setProductList((state) => [
-      ...state,
-      {
-        _id: Date.now(),
-        img,
-        name,
-        detail,
-        price,
-      },
-    ]);
+  const onHandleCreate = async () => {
+    await axios.post('http://localhost:4000/product', {
+      title: name,
+      imgLink: img,
+      detail,
+      price,
+    });
+    fetchData();
     setDetailProduct(null);
   };
 

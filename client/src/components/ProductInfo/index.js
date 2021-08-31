@@ -6,6 +6,7 @@ const InfoComponent = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  width: 500px;
   & > img {
     width: 200px;
     height: 200px;
