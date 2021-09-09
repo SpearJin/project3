@@ -50,3 +50,15 @@ body {
   margin: 2px 0;
   text-align: center;
 }
+
+.sigin-label {
+  color: black;
+  font-size: 15px;
+}
+
+.add-input {
+  display: flex;
+  justify-content: center;
+  width: 200px;
+  transform: translate(200px);
+}

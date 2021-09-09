@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Comment from '../Comment';
 import styled from 'styled-components';
 import addComma from '../../util/addComma';
+import useApiCall from '../../hooks/useApiCall';
 
 const DetailComponent = styled.div`
   display: ${({ isDisplayNone }) => (isDisplayNone ? 'none' : 'block')};
@@ -54,19 +56,48 @@ const DetailButton = styled.button`
   }
 `;
 
-function ProductDetail({
-  detailProduct,
-  setDetailProduct,
-  setProductList,
-  fetchData,
-}) {
+const DetailComment = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: fixed;
+  top: 75%;
+  left: 20%;
+  width: 60%;
+  height: 14%;
+  border-radius: 4px;
+  background-color: wheat;
+`;
+
+function ProductDetail({ detailProduct, setDetailProduct, fetchData }) {
   const [img, setImg] = useState(detailProduct.imgLink);
   const [name, setName] = useState(detailProduct.title);
   const [detail, setDetail] = useState(detailProduct.detail);
   const [price, setPrice] = useState(detailProduct.price);
-
   const [currentState, setCurrentState] = useState('none');
   const isDisplayNone = detailProduct === null;
+
+  const [comments, setComments] = useState(null);
+  const [addState, setAddState] = useState('none');
+  const commentInputRef = useRef(null);
+
+  const [payload, loading, error, fetchDataComment] = useApiCall(
+    `http://localhost:4000/comment/${detailProduct._id}`
+  );
+
+  useEffect(() => {
+    if (payload?.comment) {
+      setComments(payload.comment);
+    }
+  }, [payload]);
+
+  if (loading) {
+    return <>로딩 중...</>;
+  }
+
+  if (error) {
+    return <>{error.message}</>;
+  }
 
   const onHandleDelete = async () => {
     await axios.delete(`http://localhost:4000/product/${detailProduct._id}`);
@@ -95,6 +126,15 @@ function ProductDetail({
     });
     fetchData();
     setDetailProduct(null);
+  };
+
+  const onHandleCreateComment = async () => {
+    const value = commentInputRef.current.value;
+    await axios.post('http://localhost:4000/comment', {
+      id: detailProduct._id,
+      comment: value,
+    });
+    fetchDataComment();
   };
 
   const divDetail = (
@@ -186,6 +226,13 @@ function ProductDetail({
     </>
   );
 
+  const addButton = (
+    <>
+      <input className='add-input' type='text' ref={commentInputRef} />
+      <button onClick={onHandleCreateComment}>추가</button>
+    </>
+  );
+
   return (
     <>
       <DetailComponent isDisplayNone={isDisplayNone}>
@@ -197,6 +244,19 @@ function ProductDetail({
             ? createDetail
             : divDetail}
         </DetailInfo>
+        <DetailComment>
+          {!comments || comments.length === 0
+            ? addButton
+            : comments?.map((comment, idx) => (
+                <Comment
+                  index={idx}
+                  productId={detailProduct._id}
+                  comment={comment}
+                  comments={comments}
+                  fetchDataComment={fetchDataComment}
+                />
+              ))}
+        </DetailComment>
       </DetailComponent>
       <DetailWrapper />
     </>
@@ -204,3 +264,9 @@ function ProductDetail({
 }
 
 export default ProductDetail;
+
+// if (!comments || comments.length === 0) {
+// } else {
+// }
+//조건 : comments가 없거나 comments의 길이가 0일때... 추가 버튼이 나오게한다.
+//     comments길이가 0보다 클때 있으면 comments.들을 보여준다.
