@@ -62,3 +62,8 @@ body {
   width: 200px;
   transform: translate(200px);
 }
+
+.error-meesage {
+  color: red;
+  font-size: 15px;
+}

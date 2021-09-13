@@ -12,6 +12,7 @@ const LoginModalWrapper = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
+  z-index: 1;
 `;
 
 const LoginModal = styled.div`
@@ -64,6 +65,7 @@ function Login({ userName, setUserName }) {
   const [isDisplay, setIsDisplay] = useState(false);
   const [currentLoginState, setCurrentLoginState] = useState('signin');
   const [loginState, setLoginState] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const userIdRef = useRef(null);
   const userNameRef = useRef(null);
@@ -71,26 +73,35 @@ function Login({ userName, setUserName }) {
   const userGenderRef = useRef(null);
 
   const onHandlerSignUp = async () => {
-    console.log(userGenderRef);
-    await axios.post('http://localhost:4000/user', {
-      id: userIdRef.current.value,
-      name: userNameRef.current.value,
-      password: userPasswordRef.current.value,
-      gender: userGenderRef.current.value,
-    });
-    setUserName(userNameRef.current.value);
-    setLoginState('login');
-    setIsDisplay(false);
+    console.log(userGenderRef.current);
+    try {
+      await axios.post('http://localhost:4000/user', {
+        id: userIdRef.current.value,
+        name: userNameRef.current.value,
+        password: userPasswordRef.current.value,
+        gender: userGenderRef.current.value,
+      });
+      setUserName(userNameRef.current.value);
+      setLoginState('login');
+      setIsDisplay(false);
+    } catch (error) {
+      console.log(error.response.data);
+      setErrorMessage(error.response.data);
+    }
   };
 
   const onHandlerLogin = async () => {
-    const userInfo = await axios.post('http://localhost:4000/user/login', {
-      id: userIdRef.current.value,
-      password: userPasswordRef.current.value,
-    });
-    setUserName(userInfo.data.userName);
-    setLoginState('login');
-    setIsDisplay(false);
+    try {
+      const userInfo = await axios.post('http://localhost:4000/user/login', {
+        id: userIdRef.current.value,
+        password: userPasswordRef.current.value,
+      });
+      setUserName(userInfo.data.userName);
+      setLoginState('login');
+      setIsDisplay(false);
+    } catch (error) {
+      setErrorMessage(error.response.data);
+    }
   };
 
   const wrapperClick = () => {
@@ -103,17 +114,23 @@ function Login({ userName, setUserName }) {
     setUserName(null);
   };
 
+  const onHandlerCancle = () => {
+    setCurrentLoginState('signin');
+    setErrorMessage(null);
+  };
+
+  const onClickSignUp = () => {
+    setCurrentLoginState('signup');
+    setErrorMessage(null);
+  };
+
   const signInForm = (
     <SignInForm>
       <input placeholder='아이디' ref={userIdRef} />
       <input placeholder='비밀번호' ref={userPasswordRef} />
+      {errorMessage && <div className='error-meesage'>{errorMessage}</div>}
       <div>
-        <SiginButton
-          onClick={onHandlerSignUp}
-          onClick={() => setCurrentLoginState('signup')}
-        >
-          회원가입
-        </SiginButton>
+        <SiginButton onClick={onClickSignUp}>회원가입</SiginButton>
         <SiginButton onClick={onHandlerLogin}>로그인</SiginButton>
       </div>
     </SignInForm>
@@ -125,17 +142,19 @@ function Login({ userName, setUserName }) {
         <input placeholder='아이디' ref={userIdRef} />
         <input placeholder='닉네임' ref={userNameRef} />
         <input placeholder='비밀번호' ref={userPasswordRef} />
-        <label className='sigin-label'>
+        <select className='sigin-label' ref={userGenderRef}>
           성별:
-          <input type='radio' name='gender' value='남' ref={userGenderRef} />
-          남
-          <input type='radio' name='gender' value='여' ref={userGenderRef} />여
-        </label>
+          <option type='radio' name='gender'>
+            남
+          </option>
+          <option type='radio' name='gender'>
+            여
+          </option>
+        </select>
+        {errorMessage && <div className='error-meesage'>{errorMessage}</div>}
         <div>
           <SiginButton onClick={onHandlerSignUp}>완료</SiginButton>
-          <SiginButton onClick={() => setCurrentLoginState('signin')}>
-            취소
-          </SiginButton>
+          <SiginButton onClick={onHandlerCancle}>취소</SiginButton>
         </div>
       </SignForm>
     </>
