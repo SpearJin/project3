@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
+const validUser = require('../middleware/auth');
 const ProductModel = require('../models/product');
 
-router.get('/', async function (req, res) {
+router.get('/', validUser, async function (req, res) {
   const products = await ProductModel.find({}).exec();
+  console.log(`user: ${req.user.username}`);
   res.send(products);
 });
 
@@ -14,21 +15,24 @@ router.get('/:id', async function (req, res) {
   res.send(product);
 });
 
-router.post('', async function (req, res) {
+router.post('/', validUser, async function (req, res) {
   const { title, imgLink, detail, price } = req.body;
+  const currentUser = req.user.username;
   await ProductModel.create({
     title,
     imgLink,
     detail,
     price,
+    writer: currentUser,
   });
   res.send('Post Product');
 });
 
-router.put('', async function (req, res) {
+router.put('/', validUser, async function (req, res) {
   const { id, title, imgLink, detail, price } = req.body;
+  const currentUser = req.user.username;
   await ProductModel.updateOne(
-    { _id: id },
+    { _id: id, writer: currentUser },
     {
       title,
       imgLink,

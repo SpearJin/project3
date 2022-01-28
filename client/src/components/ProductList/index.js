@@ -15,11 +15,17 @@ const ListComponent = styled.div`
   font-size: 1.5rem;
 `;
 
-function ProductList() {
+function ProductList(
+  {
+    /*accessToken*/
+  }
+) {
   const [detailProduct, setDetailProduct] = useState(null);
   const [productList, setProductList] = useState(null);
+  // console.log(`토큰: ${JSON.stringify(accessToken)}`);
   const [payload, loading, error, fetchData] = useApiCall(
-    'http://localhost:4000/product'
+    '/product'
+    // accessToken
   );
 
   useEffect(() => {
@@ -31,7 +37,12 @@ function ProductList() {
   }
 
   if (error) {
-    return <>{error.message}</>;
+    return (
+      <>
+        {error.message}
+        <button onClick={fetchData}>새로고침</button>
+      </>
+    );
   }
 
   if (!productList) {

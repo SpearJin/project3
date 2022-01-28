@@ -61,7 +61,7 @@ const SiginButton = styled.button`
   }
 `;
 
-function Login({ userName, setUserName }) {
+function Login({ userName, setUserName, setAccessToken }) {
   const [isDisplay, setIsDisplay] = useState(false);
   const [currentLoginState, setCurrentLoginState] = useState('signin');
   const [loginState, setLoginState] = useState('');
@@ -75,7 +75,7 @@ function Login({ userName, setUserName }) {
   const onHandlerSignUp = async () => {
     console.log(userGenderRef.current);
     try {
-      await axios.post('http://localhost:4000/user', {
+      await axios.post('/user', {
         id: userIdRef.current.value,
         name: userNameRef.current.value,
         password: userPasswordRef.current.value,
@@ -92,11 +92,13 @@ function Login({ userName, setUserName }) {
 
   const onHandlerLogin = async () => {
     try {
-      const userInfo = await axios.post('http://localhost:4000/user/login', {
+      const accessToken = await axios.post('/user/login', {
         id: userIdRef.current.value,
         password: userPasswordRef.current.value,
       });
-      setUserName(userInfo.data.userName);
+      // setAccessToken(accessToken.data);
+      // setUserName(accessToken);
+      localStorage.setItem('accessToken', accessToken.data);
       setLoginState('login');
       setIsDisplay(false);
     } catch (error) {

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 
 const UserModel = require('../models/user');
@@ -10,8 +11,7 @@ router.post('/login', async function (req, res) {
     userId: id,
   });
   if (!userInfo) {
-    res.status(403);
-    res.send('아이디가 일치하지 않습니다.');
+    res.status(403).send('아이디가 일치하지 않습니다.');
     return;
   }
 
@@ -24,12 +24,15 @@ router.post('/login', async function (req, res) {
         > 일치하면 userInfo를 응답한다.
         > 일치하지 않으면 '비밀번호가 일치하지 않습니다' 보낸다
   */
-  console.log(userInfo);
   if (verifyPassword) {
-    res.send(userInfo);
+    const token = jwt.sign({ username: id }, 'test', { expiresIn: '1h' });
+    // res.cookie('access_token', token, {
+    //   expires: new Date(Date.now() + 900000),
+    //   httpOnly: true,
+    // });
+    res.send(token);
   } else {
-    res.status(403);
-    res.send('비밀번호가 일치하지 않습니다.');
+    res.status(403).send('비밀번호가 일치하지 않습니다.');
   }
 });
 
@@ -48,11 +51,8 @@ router.post('/', async function (req, res) {
   } else {
     const strName = String(name);
     for (let i = 0; i < strName.length; i++) {
-      console.log(strName[i]);
-      console.log(`아스키: ${strName[i].charCodeAt()}`);
       const c = strName[i].charCodeAt();
       if (!((c >= 65 && c <= 90) || (c >= 97 && c <= 122))) {
-        console.log('실행 되니?');
         res.status(403).send('영어만 입력 하세요');
         return;
       }
@@ -73,7 +73,6 @@ router.post('/', async function (req, res) {
     res.status(403).send('성별을 선택 하세요');
     return;
   }
-  console.log(gender);
 
   await UserModel.create({
     userId: id,

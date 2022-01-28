@@ -30,7 +30,7 @@ function Comment({ index, productId, comment, comments, fetchDataComment }) {
   const [commentState, setCommentState] = useState('none');
 
   const onHandleUpdate = async () => {
-    await axios.put('http://localhost:4000/comment', {
+    await axios.put('/comment', {
       id: productId,
       comment: newComment,
       index,
@@ -40,12 +40,12 @@ function Comment({ index, productId, comment, comments, fetchDataComment }) {
 
   const onHandleDelete = async () => {
     console.log(`productId: ${productId}`);
-    await axios.delete(`http://localhost:4000/comment/${productId}/${index}`);
+    await axios.delete(`/comment/${productId}/${index}`);
     fetchDataComment();
   };
 
   const onHandleCreate = async () => {
-    await axios.post('http://localhost:4000/comment', {
+    await axios.post('/comment', {
       id: productId,
       comment: newComment,
     });

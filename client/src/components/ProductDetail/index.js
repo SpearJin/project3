@@ -82,7 +82,7 @@ function ProductDetail({ detailProduct, setDetailProduct, fetchData }) {
   const commentInputRef = useRef(null);
 
   const [payload, loading, error, fetchDataComment] = useApiCall(
-    `http://localhost:4000/comment/${detailProduct._id}`
+    `/comment/${detailProduct._id}`
   );
 
   useEffect(() => {
@@ -100,13 +100,13 @@ function ProductDetail({ detailProduct, setDetailProduct, fetchData }) {
   }
 
   const onHandleDelete = async () => {
-    await axios.delete(`http://localhost:4000/product/${detailProduct._id}`);
+    await axios.delete(`/product/${detailProduct._id}`);
     fetchData();
     setDetailProduct(null);
   };
 
   const onHandleUpdate = async () => {
-    await axios.put('http://localhost:4000/product', {
+    await axios.put('/product', {
       id: detailProduct._id,
       title: name,
       imgLink: img,
@@ -118,7 +118,7 @@ function ProductDetail({ detailProduct, setDetailProduct, fetchData }) {
   };
 
   const onHandleCreate = async () => {
-    await axios.post('http://localhost:4000/product', {
+    await axios.post('/product', {
       title: name,
       imgLink: img,
       detail,
@@ -130,7 +130,7 @@ function ProductDetail({ detailProduct, setDetailProduct, fetchData }) {
 
   const onHandleCreateComment = async () => {
     const value = commentInputRef.current.value;
-    await axios.post('http://localhost:4000/comment', {
+    await axios.post('/comment', {
       id: detailProduct._id,
       comment: value,
     });

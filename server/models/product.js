@@ -13,6 +13,9 @@ const ProductSchema = new Schema({
   price: {
     type: Number,
   },
+  writer: {
+    type: String,
+  },
 });
 
 module.exports = model('product', ProductSchema);

@@ -7,10 +7,13 @@ import ProductList from './components/ProductList';
 
 function App() {
   const [page, setPage] = useState('list');
-  const renderPage = page === 'list' ? <ProductList /> : <Cart />;
+  const [accessToken, setAccessToken] = useState(null);
+
+  const renderPage =
+    page === 'list' ? <ProductList accessToken={accessToken} /> : <Cart />;
   return (
     <>
-      <Header />
+      <Header setAccessToken={setAccessToken} />
       {renderPage}
       <Footer setPage={setPage} />
     </>

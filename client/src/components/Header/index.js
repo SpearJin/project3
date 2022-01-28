@@ -26,14 +26,18 @@ const Name = styled.div`
   font-size: 15px;
 `;
 
-function Header() {
+function Header({ setAccessToken }) {
   const [userName, setUserName] = useState(null);
 
   return (
     <HeaderCompoent>
       헤더 입니다.
       {userName && <Name>{userName}님 환영합니다.</Name>}
-      <Login userName={userName} setUserName={setUserName} />
+      <Login
+        userName={userName}
+        setUserName={setUserName}
+        setAccessToken={setAccessToken}
+      />
     </HeaderCompoent>
   );
 }
